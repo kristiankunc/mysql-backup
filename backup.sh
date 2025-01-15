@@ -18,7 +18,7 @@ echo "Dump uploaded"
 gsutil ls gs://$BACKUP_BUCKET/ | while read -r file; do
     file_date=$(echo "$file" | grep -o '[0-9]\{2\}-[0-9]\{2\}-[0-9]\{4\}')
     if [ ! -z "$file_date" ]; then
-        file_timestamp=$(date -d "${file_date}" +%s)
+        file_timestamp=$(date -d "$(echo ${file_date} | sed 's/\([0-9]\{2\}\)-\([0-9]\{2\}\)-\([0-9]\{4\}\)/\2/\1/\3/')" +%s)
         current_timestamp=$(date +%s)
         age_days=$(( (current_timestamp - file_timestamp) / 86400 ))
         if [ $age_days -gt $BACKUP_RETENTION_DAYS ]; then
