@@ -7,7 +7,7 @@ DATE=$(date +"%d-%m-%Y")
 FILENAME_PATH="/tmp/mysql_bacup/backup_$DATE.sql"
 
 mkdir -p "$(dirname "$FILENAME_PATH")"
-mysqldump -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > $FILENAME_PATH
+mysqldump -h $MYSQL_HOST -P 3306 -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > $FILENAME_PATH
 
 echo "MySQL dump completed"
 

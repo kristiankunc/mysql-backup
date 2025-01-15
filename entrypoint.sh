@@ -2,8 +2,8 @@
 /usr/sbin/crond -f -l 2 &
 
 gcloud auth activate-service-account --key-file=$BACKUP_CREDENTIALS_PATH
+gcloud config set project $BACKUP_PROJECT_ID
 gcloud auth login
-gcloud config set project $PROJECT_ID
 
 ./app/backup.sh
 
