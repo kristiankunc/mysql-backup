@@ -10,7 +10,7 @@ mysqldump -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > $FIL
 
 echo "MySQL dump completed"
 
-gsutil cp /tmp/backup_$DATE.sql gs://$GCS_BUCKET/$DATE.sql
+gsutil cp $FILENAME_PATH gs://$GCS_BUCKET/$DATE.sql
 
 echo "Dump uploaded"
 

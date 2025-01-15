@@ -1,6 +1,8 @@
 #!/bin/sh
-crond
+set -e
 
-./app/entrypoint.sh
+/usr/sbin/crond -f -l 8 &
 
-tail -f /dev/null
+./app/entrypoint.sh &
+
+exec tail -f /var/log/cron.log /var/log/syslog 2>/dev/null || true
