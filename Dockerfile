@@ -7,7 +7,7 @@ RUN apk update && apk upgrade && \
 COPY backup.sh /app/backup.sh
 RUN chmod +x /app/backup.sh
 
-COPY start.sh /app/entrypoint.sh
+COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
 COPY crontab /etc/cron.d/backup-cron
