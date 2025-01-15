@@ -6,21 +6,22 @@ DATE=$(date +"%d-%m-%Y")
 
 FILENAME_PATH="/tmp/mysql_bacup/backup_$DATE.sql"
 
+mkdir -p "$(dirname "$FILENAME_PATH")"
 mysqldump -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > $FILENAME_PATH
 
 echo "MySQL dump completed"
 
-gsutil cp $FILENAME_PATH gs://$GCS_BUCKET/$DATE.sql
+gsutil cp $FILENAME_PATH gs://$BACKUP_BUCKET/$DATE.sql
 
 echo "Dump uploaded"
 
-gsutil ls gs://$GCS_BUCKET/ | while read -r file; do
+gsutil ls gs://$BACKUP_BUCKET/ | while read -r file; do
     file_date=$(echo "$file" | grep -o '[0-9]\{2\}-[0-9]\{2\}-[0-9]\{4\}')
     if [ ! -z "$file_date" ]; then
         file_timestamp=$(date -d "${file_date}" +%s)
         current_timestamp=$(date +%s)
         age_days=$(( (current_timestamp - file_timestamp) / 86400 ))
-        if [ $age_days -gt $RETENTION_DAYS ]; then
+        if [ $age_days -gt $BACKUP_RETENTION_DAYS ]; then
             gsutil rm "$file"
             echo "Deleted $file, $age_days days old"
         fi
