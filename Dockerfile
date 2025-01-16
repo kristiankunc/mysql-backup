@@ -1,7 +1,7 @@
 FROM google/cloud-sdk:alpine
 
 RUN apk update && apk upgrade && \
-    apk add --no-cache dcron rsyslog mysql-client && \
+    apk add --no-cache dcron rsyslog mysql-client mariadb-connector-c-dev && \
     mkdir -p /app /var/log/cron
 
 COPY backup.sh /app/backup.sh
