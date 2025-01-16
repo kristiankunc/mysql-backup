@@ -19,7 +19,7 @@ gsutil ls gs://$BACKUP_BUCKET/ | while read -r file; do
     file=$(echo "$file" | tr -d '\r\n')
     filename=$(basename "$file" .sql)
     if [[ $filename =~ ^[0-9]{2}-[0-9]{2}-[0-9]{4}$ ]]; then
-        file_date=$(date -d "$(echo $filename | sed 's/\([0-9]\{2\}\)-\([0-9]\{2\}\)-\([0-9]\{4\}\)/\2\/\1\/\3/')" +%s 2>/dev/null)
+        file_date=$(date -d "$(echo $filename | sed 's/\([0-9]\{2\}\)-\([0-9]\{2\}\)-\([0-9]\{4\}\)/\3-\2-\1/')" +%s 2>/dev/null)
         if [ $? -ne 0 ]; then
             echo "Error parsing date from filename: $filename"
             continue
