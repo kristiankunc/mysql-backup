@@ -3,7 +3,6 @@
 
 gcloud auth activate-service-account --key-file=$BACKUP_CREDENTIALS_PATH
 gcloud config set project $BACKUP_PROJECT_ID
-gcloud auth login
 
 ./app/backup.sh
 
