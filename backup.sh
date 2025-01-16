@@ -17,6 +17,8 @@ echo "Dump uploaded"
 
 gsutil ls gs://$BACKUP_BUCKET/ | while read -r file; do
     file=$(echo "$file" | tr -d '\r\n')
+    if [[ ! "$file" =~ \.sql$ ]]; continue; fi
+
     filename=$(basename "$file" .sql)
     if [[ $filename =~ ^[0-9]{2}-[0-9]{2}-[0-9]{4}$ ]]; then
         file_date=$(date -d "$(echo $filename | sed 's/\([0-9]\{2\}\)-\([0-9]\{2\}\)-\([0-9]\{4\}\)/\3-\2-\1/')" +%s 2>/dev/null)
@@ -24,12 +26,14 @@ gsutil ls gs://$BACKUP_BUCKET/ | while read -r file; do
             echo "Error parsing date from filename: $filename"
             continue
         fi
+        
         current_date=$(date +%s)
         age_days=$(( (current_date - file_date) / 86400 ))
         if [ $age_days -gt $BACKUP_RETENTION_DAYS ]; then
             gsutil rm "$file"
             echo "Deleted $file, $age_days days old"
         fi
+
     else
         echo "Skipping invalid filename format: $filename"
     fi
